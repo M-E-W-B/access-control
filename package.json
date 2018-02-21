@@ -1,0 +1,31 @@
+{
+  "name": "rbac",
+  "version": "1.0.0",
+  "description": "a minimalistic ACL implementation",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/M-E-W-B/rbac.git"
+  },
+  "keywords": [
+    "acl",
+    "authorization"
+  ],
+  "author": "kshirish",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/M-E-W-B/rbac/issues"
+  },
+  "homepage": "https://github.com/M-E-W-B/rbac#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "jsonwebtoken": "^8.1.1",
+    "lodash": "^4.17.5",
+    "mongoose": "^5.0.6"
+  }
+}

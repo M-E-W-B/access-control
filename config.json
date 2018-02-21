@@ -1,0 +1,11 @@
+{
+  "secret": "what's the rumpus",
+  "database": {
+    "dev": "mongodb://localhost:27017/rbac",
+    "options": {
+      "autoIndex": false,
+      "poolSize": 10,
+      "bufferMaxEntries": 0
+    }
+  }
+}
