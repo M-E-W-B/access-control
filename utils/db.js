@@ -13,6 +13,6 @@ const open = () => {
   });
 };
 
-const close = mongoose.disconnect;
+const close = mongoose.connection.close;
 
 module.exports = { close, open };

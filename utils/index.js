@@ -1,3 +1,4 @@
 module.exports = {
-  MongooseConnect: require("./db")
+  MongooseConnect: require("./db"),
+  checkPermission: require("./check-permission")
 };
