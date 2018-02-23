@@ -49,7 +49,7 @@ module.exports = router => {
   // list all groups of a user
   router.get(
     "/user/:userId/group",
-    checkPermission("LIST_USER_GROUPS", "User", , req => req.params.userId),
+    checkPermission("LIST_USER_GROUPS", "User", req => req.params.userId),
     (req, res, next) => {
       const { userId } = req.params;
 

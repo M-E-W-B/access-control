@@ -19,7 +19,6 @@ module.exports = (operation, modelname, rowResolver) => {
       const _id = rowResolver(req);
       const Model = mongoose.model(modelname);
       const results = await Model.find({ _id, owner: userId });
-
       results.length && conditions.push({ accessType: "OWNER" });
     }
 

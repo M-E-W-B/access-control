@@ -1,7 +1,7 @@
 {
   "secret": "what's the rumpus",
   "database": {
-    "dev": "mongodb://localhost:27017/rbac",
+    "dev": "mongodb://localhost:27017/access-control",
     "options": {
       "autoIndex": false,
       "poolSize": 10,

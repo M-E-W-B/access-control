@@ -17,7 +17,6 @@ module.exports = router => {
   );
 
   // get a user
-  // @TODO
   router.get(
     "/user/:id",
     checkPermission("READ", "User", req => req.params.id),

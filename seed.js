@@ -96,22 +96,6 @@ const rules = [
     accessType: "GROUP",
     groupId: groups[0]._id
   },
-  // setting rules on GroupMember
-  {
-    _id: ObjectId(),
-    description: "Anything on a groupmember",
-    operation: "*",
-    modelname: "GroupMember",
-    accessType: "GROUP",
-    groupId: groups[0]._id
-  },
-  {
-    _id: ObjectId(),
-    description: "List groups of a user",
-    operation: "LIST_USER_GROUPS",
-    modelname: "GroupMember",
-    accessType: "OWNER"
-  },
   // setting rules on User
   {
     _id: ObjectId(),
@@ -120,6 +104,13 @@ const rules = [
     modelname: "User",
     accessType: "GROUP",
     groupId: groups[0]._id
+  },
+  {
+    _id: ObjectId(),
+    description: "List groups of a user",
+    operation: "LIST_USER_GROUPS",
+    modelname: "User",
+    accessType: "OWNER"
   },
   {
     _id: ObjectId(),
