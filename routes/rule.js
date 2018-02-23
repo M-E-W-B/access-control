@@ -14,8 +14,6 @@ module.exports = router => {
       "userId"
     ]);
 
-    obj.createdBy = req.decoded._id;
-
     const rule = new Rule(obj);
 
     rule
@@ -27,7 +25,7 @@ module.exports = router => {
   // delete a rule
   router.delete(
     "/rule/:id",
-    checkPermission("DELETE", "Rule"),
+    checkPermission("DELETE", "Rule", req => req.params.id),
     (req, res, next) => {
       const ruleId = req.params.id;
 
@@ -40,7 +38,7 @@ module.exports = router => {
   // update a rule
   router.put(
     "/rule/:id",
-    checkPermission("UPDATE", "Rule"),
+    checkPermission("UPDATE", "Rule", req => req.params.id),
     (req, res, next) => {
       const ruleId = req.params.id;
       const options = { new: true };
@@ -60,13 +58,17 @@ module.exports = router => {
   );
 
   // rule details
-  router.get("/rule/:id", checkPermission("READ", "Rule"), (req, res, next) => {
-    const ruleId = req.params.id;
+  router.get(
+    "/rule/:id",
+    checkPermission("READ", "Rule", req => req.params.id),
+    (req, res, next) => {
+      const ruleId = req.params.id;
 
-    Rule.findById(ruleId)
-      .then(rule => res.json(rule))
-      .catch(next);
-  });
+      Rule.findById(ruleId)
+        .then(rule => res.json(rule))
+        .catch(next);
+    }
+  );
 
   // list of rules
   router.get("/rule", checkPermission("LIST", "Rule"), (req, res, next) => {

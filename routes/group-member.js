@@ -6,12 +6,10 @@ module.exports = router => {
   // add a user to a group
   router.post(
     "/group/:groupId/user/:userId",
-    checkPermission("CREATE", "GroupMember"),
+    checkPermission("CREATE", "Group", req => req.params.groupId),
     (req, res, next) => {
       const { groupId, userId } = req.params;
       const obj = { groupId, userId };
-      obj.createdBy = req.decoded._id;
-
       const groupMember = new GroupMember(obj);
 
       groupMember
@@ -24,7 +22,7 @@ module.exports = router => {
   // remove a user from a group
   router.delete(
     "/group/:groupId/user/:userId",
-    checkPermission("DELETE", "GroupMember"),
+    checkPermission("DELETE", "Group", req => req.params.groupId),
     (req, res, next) => {
       const { groupId, userId } = req.params;
 
@@ -37,7 +35,7 @@ module.exports = router => {
   // list all users of a group
   router.get(
     "/group/:groupId/user",
-    checkPermission("LIST_GROUP_USERS", "GroupMember"),
+    checkPermission("LIST_GROUP_USERS", "Group", req => req.params.groupId),
     (req, res, next) => {
       const { groupId } = req.params;
 
@@ -48,12 +46,12 @@ module.exports = router => {
     }
   );
 
-  // list all groups of which a user is member
+  // list all groups of a user
   router.get(
-    "/user/member/group",
-    checkPermission("LIST_USER_GROUPS", "GroupMember"),
+    "/user/:userId/group",
+    checkPermission("LIST_USER_GROUPS", "User", , req => req.params.userId),
     (req, res, next) => {
-      const userId = req.decoded._id;
+      const { userId } = req.params;
 
       GroupMember.find({ userId })
         .populate("groupId")

@@ -10,7 +10,7 @@ module.exports = router => {
     (req, res, next) => {
       const obj = pick(req.body, ["name"]);
 
-      obj.createdBy = req.decoded._id;
+      obj.owner = req.decoded._id;
 
       const group = new Group(obj);
 
@@ -24,7 +24,7 @@ module.exports = router => {
   // delete a group
   router.delete(
     "/group/:id",
-    checkPermission("DELETE", "Group"),
+    checkPermission("DELETE", "Group", req => req.params.id),
     (req, res, next) => {
       const groupId = req.params.id;
 
@@ -37,7 +37,7 @@ module.exports = router => {
   // update a group
   router.put(
     "/group/:id",
-    checkPermission("UPDATE", "Group"),
+    checkPermission("UPDATE", "Group", req => req.params.id),
     (req, res, next) => {
       const groupId = req.params.id;
       const options = { new: true };
@@ -50,20 +50,16 @@ module.exports = router => {
   );
 
   // group details
-  router.get(
-    "/group/:id",
-    checkPermission("READ", "Group"),
-    (req, res, next) => {
-      const groupId = req.params.id;
+  router.get("/group/:id", (req, res, next) => {
+    const groupId = req.params.id;
 
-      Group.findById(groupId)
-        .then(group => res.json(group))
-        .catch(next);
-    }
-  );
+    Group.findById(groupId)
+      .then(group => res.json(group))
+      .catch(next);
+  });
 
   // list of groups
-  router.get("/group", checkPermission("LIST", "Group"), (req, res, next) => {
+  router.get("/group", (req, res, next) => {
     Group.find({})
       .then(groups => res.json(groups))
       .catch(next);

@@ -6,7 +6,7 @@ module.exports = router => {
   // delete a user
   router.delete(
     "/user/:id",
-    checkPermission("DELETE", "User"),
+    checkPermission("DELETE", "User", req => req.params.id),
     (req, res, next) => {
       const userId = req.params.id;
 
@@ -17,18 +17,23 @@ module.exports = router => {
   );
 
   // get a user
-  router.get("/user/:id", checkPermission("READ", "User"), (req, res, next) => {
-    const userId = req.params.id;
+  // @TODO
+  router.get(
+    "/user/:id",
+    checkPermission("READ", "User", req => req.params.id),
+    (req, res, next) => {
+      const userId = req.params.id;
 
-    User.findById(userId)
-      .then(user => res.json(user))
-      .catch(next);
-  });
+      User.findById(userId)
+        .then(user => res.json(user))
+        .catch(next);
+    }
+  );
 
   // edit a user
   router.put(
     "/user/:id",
-    checkPermission("UPDATE", "User"),
+    checkPermission("UPDATE", "User", req => req.params.id),
     (req, res, next) => {
       const userId = req.params.id;
       const options = { new: true };

@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 // set up a mongoose model
+// @NOTE: Owner of a book is the one who created it
 module.exports = mongoose.model(
   "Book",
   new Schema({
@@ -9,6 +10,6 @@ module.exports = mongoose.model(
     author: String,
     pageCount: Number,
     publication: String,
-    createdBy: { type: Schema.Types.ObjectId, ref: "User" }
+    owner: { type: Schema.Types.ObjectId, ref: "User" }
   })
 );

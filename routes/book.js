@@ -4,10 +4,10 @@ const { checkPermission } = require("../utils");
 
 module.exports = router => {
   // create a book
-  router.post("/book", checkPermission("CREATE", "Book"), (req, res, next) => {
+  router.post("/book", (req, res, next) => {
     const obj = pick(req.body, ["title", "author", "pageCount", "publication"]);
 
-    obj.createdBy = req.decoded._id;
+    obj.owner = req.decoded._id;
 
     const book = new Book(obj);
 
@@ -20,7 +20,7 @@ module.exports = router => {
   // delete a book
   router.delete(
     "/book/:id",
-    checkPermission("DELETE", "Book"),
+    checkPermission("DELETE", "Book", req => req.params.id),
     (req, res, next) => {
       const bookId = req.params.id;
 
@@ -33,7 +33,7 @@ module.exports = router => {
   // update a book
   router.put(
     "/book/:id",
-    checkPermission("UPDATE", "Book"),
+    checkPermission("UPDATE", "Book", req => req.params.id),
     (req, res, next) => {
       const bookId = req.params.id;
       const options = { new: true };
@@ -51,7 +51,7 @@ module.exports = router => {
   );
 
   // book details
-  router.get("/book/:id", checkPermission("READ", "Book"), (req, res, next) => {
+  router.get("/book/:id", (req, res, next) => {
     const bookId = req.params.id;
 
     Book.findById(bookId)
@@ -60,7 +60,7 @@ module.exports = router => {
   });
 
   // list of books
-  router.get("/book", checkPermission("LIST", "Book"), (req, res, next) => {
+  router.get("/book", (req, res, next) => {
     Book.find({})
       .then(books => res.json(books))
       .catch(next);

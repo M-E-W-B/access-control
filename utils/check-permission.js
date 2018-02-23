@@ -1,21 +1,32 @@
+const mongoose = require("mongoose");
+const { isFunction } = require("lodash");
+const { ObjectId } = mongoose.Types;
 const Rule = require("../models/rule");
 const GroupMember = require("../models/group-member");
 
-module.exports = (operation, modelname) => {
+module.exports = (operation, modelname, rowResolver) => {
   return async function(req, res, next) {
     const userId = req.decoded._id;
     const groupMembers = await GroupMember.find({ userId });
     const groupIds = groupMembers.map(gm => gm.groupId);
 
+    const conditions = [
+      { accessType: "GROUP", groupId: { $in: groupIds } },
+      { accessType: "USER", userId }
+    ];
+
+    if (isFunction(rowResolver)) {
+      const _id = rowResolver(req);
+      const Model = mongoose.model(modelname);
+      const results = await Model.find({ _id, owner: userId });
+
+      results.length && conditions.push({ accessType: "OWNER" });
+    }
+
     const rules = await Rule.find({
-      operation,
+      operation: { $in: [operation, "*"] },
       modelname,
-      $or: [
-        { accessType: "GLOBAL" },
-        { accessType: "OWNER", createdBy: userId },
-        { accessType: "GROUP", groupId: { $in: groupIds } },
-        { accessType: "USER", userId }
-      ]
+      $or: conditions
     });
 
     // console.log(userId);
@@ -23,6 +34,6 @@ module.exports = (operation, modelname) => {
     // console.log(rules);
 
     if (rules.length) next();
-    else next(new Error("Unauthorized access"));
+    else next(new Error("Unauthorized Access"));
   };
 };
